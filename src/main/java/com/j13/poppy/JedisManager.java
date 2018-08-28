@@ -19,6 +19,7 @@ public class JedisManager {
     public void init() {
         String ip = PropertiesConfiguration.getInstance().getStringValue("redis.ip");
         int port = PropertiesConfiguration.getInstance().getIntValue("redis.port");
+        LOG.debug("redis ip={},port={}", ip, port);
         pool = new JedisPool(new JedisPoolConfig(), ip, port);
         LOG.info("redis is ready. ip = {}, port = {},class = {}", new Object[]{
                 ip, port, this.toString()
