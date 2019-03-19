@@ -30,7 +30,6 @@ public class JedisManager {
     public String get(String key) {
         Jedis jedis = null;
         String value = null;
-        LOG.info("aaaa {}", this.toString());
         try {
             jedis = pool.getResource();
             value = jedis.get(key);

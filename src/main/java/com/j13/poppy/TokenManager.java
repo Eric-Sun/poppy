@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TicketManager {
+public class TokenManager {
+
+    private static String PREFIX = "v10:";
 
     @Autowired
     JedisManager jedisManager;
 
     public int checkTicket(String t) {
-        String value = jedisManager.get(t);
+        String value = jedisManager.get(PREFIX + t);
         return value == null ? 0 : new Integer(value);
     }
 
@@ -19,12 +21,8 @@ public class TicketManager {
         int min = PropertiesConfiguration.getInstance().getIntValue("t.expire.min");
         int time = min * 60;
 
-        jedisManager.set(t, userId + "", time);
+        jedisManager.set(PREFIX + t, userId + "", time);
     }
 
-
-    private String getKey(long userId) {
-        return "t:" + userId;
-    }
 
 }

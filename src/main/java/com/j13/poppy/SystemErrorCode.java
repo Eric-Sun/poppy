@@ -5,6 +5,7 @@ public class SystemErrorCode {
     public static class Common {
         public static int INPUT_PARAMETER_ERROR = 14;
         public static int NEED_T = 15;
+        public static int T_EXPIRE=16;
     }
 
     public static class System {

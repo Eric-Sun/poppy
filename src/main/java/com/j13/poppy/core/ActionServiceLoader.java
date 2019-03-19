@@ -3,7 +3,7 @@ package com.j13.poppy.core;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.j13.poppy.anno.Action;
-import com.j13.poppy.anno.NeedTicket;
+import com.j13.poppy.anno.NeedToken;
 import com.j13.poppy.anno.Parameter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
@@ -65,10 +65,10 @@ public class ActionServiceLoader implements ApplicationContextAware {
 
                     // parse all anno(eg. Action NeedTicket)
                     Action actionAnno = (Action) actionMethod.getAnnotation(Action.class);
-                    NeedTicket ticketAnno = (NeedTicket) actionMethod.getAnnotation(NeedTicket.class);
+                    NeedToken ticketAnno = (NeedToken) actionMethod.getAnnotation(NeedToken.class);
 
                     if (ticketAnno != null) {
-                        ami.isNeedTicket();
+                        ami.isNeedToken();
                     }
 
                     if (actionAnno != null) {

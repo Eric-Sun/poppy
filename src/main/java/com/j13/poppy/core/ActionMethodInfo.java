@@ -9,7 +9,7 @@ public class ActionMethodInfo {
     private Object serviceObject;
     private Method actionMethod;
     private String actionName;
-    private boolean needTicket = false;
+    private boolean needToken = false;
     private String desc;
     // request
     private List<ParameterInfo> paramList = Lists.newLinkedList();
@@ -50,12 +50,12 @@ public class ActionMethodInfo {
         this.desc = desc;
     }
 
-    public boolean isNeedTicket() {
-        return needTicket;
+    public boolean isNeedToken() {
+        return needToken;
     }
 
-    public void setNeedTicket(boolean needTicket) {
-        this.needTicket = needTicket;
+    public void setNeedToken(boolean needToken) {
+        this.needToken = needToken;
     }
 
     public List<ParameterInfo> getParamList() {

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.j13.poppy.ErrorResponse;
 import com.j13.poppy.RequestData;
 import com.j13.poppy.SystemErrorCode;
-import com.j13.poppy.TicketManager;
+import com.j13.poppy.TokenManager;
 import com.j13.poppy.core.ActionMethodInfo;
 import com.j13.poppy.core.ActionServiceLoader;
 import com.j13.poppy.core.CommandContext;
@@ -34,7 +34,7 @@ public class ApiDispatcher {
     ActionServiceLoader actionServiceLoader;
 
     @Autowired
-    TicketManager ticketManager;
+    TokenManager tokenManager;
 
 
     public Object dispatch(String act, RequestData requestData, String postData) {
@@ -50,13 +50,13 @@ public class ApiDispatcher {
         Object beanObject = ami.getServiceObject();
         List<ParameterInfo> parameterInfoList = ami.getParamList();
         List<Object> inputParams = Lists.newLinkedList();
-
+        CommandContext ctxt = null;
 
         for (ParameterInfo pi : parameterInfoList) {
             LOG.debug(" type = {}, name = {}", pi.getClazz(), pi.getName());
             if (pi.getClazz().equals(CommandContext.class)) {
                 // get and set context
-                CommandContext ctxt = genCommandContextObject(requestData, postData);
+                ctxt = genCommandContextObject(requestData, postData);
                 inputParams.add(ctxt);
             } else {
                 // request object
@@ -78,6 +78,27 @@ public class ApiDispatcher {
 
 
         try {
+            if (ami.isNeedToken()) {
+                LOG.debug("begin to check t.");
+                if (requestData.getData().get(T_KEY) != null) {
+                    // 检查这个t
+                    String t = requestData.getData().get(T_KEY).toString();
+                    LOG.debug("t = {}", t);
+                    int userId = tokenManager.checkTicket(t);
+                    if (userId == 0) {
+                        LOG.debug("t expire. t = {}", t);
+                        // 不存在这个token
+                        return new ErrorResponse(SystemErrorCode.Common.T_EXPIRE);
+                    } else {
+                        LOG.debug("t is ok. t = {},userId = {}", t, userId);
+                        ctxt.setUid(userId);
+                    }
+                } else {
+                    return new ErrorResponse(SystemErrorCode.Common.NEED_T);
+                }
+            }
+
+
             return actionMethod.invoke(beanObject, inputParams.toArray());
         } catch (IllegalAccessException e) {
             return new ErrorResponse(SystemErrorCode.System.ACTION_REFLECT_ERROR);
