@@ -21,10 +21,10 @@ public class TokenManager {
     }
 
     public void setTicket(String t, long userId) {
-        int min = PropertiesConfiguration.getInstance().getIntValue("t.expire.min");
-        int time = min * 60;
+//        int min = PropertiesConfiguration.getInstance().getIntValue("t.expire.min");
+//        int time = min * 60;
 
-        jedisManager.set(PREFIX + t, userId + "", time);
+        jedisManager.set(PREFIX + t, userId + "");
     }
 
     public String genT() {
