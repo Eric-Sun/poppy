@@ -68,7 +68,7 @@ public class ActionServiceLoader implements ApplicationContextAware {
                     NeedToken ticketAnno = (NeedToken) actionMethod.getAnnotation(NeedToken.class);
 
                     if (ticketAnno != null) {
-                        ami.isNeedToken();
+                        ami.setNeedToken(true);
                     }
 
                     if (actionAnno != null) {

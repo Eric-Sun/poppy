@@ -1,5 +1,6 @@
 package com.j13.poppy.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.j13.poppy.ErrorResponse;
 import com.j13.poppy.RequestData;
@@ -96,6 +97,8 @@ public class ApiDispatcher {
                 } else {
                     return new ErrorResponse(SystemErrorCode.Common.NEED_T);
                 }
+            } else {
+                LOG.debug("not need token");
             }
 
 

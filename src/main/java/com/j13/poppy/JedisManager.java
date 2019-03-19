@@ -64,4 +64,15 @@ public class JedisManager {
         }
     }
 
+    public void delete(String key){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.del(key);
+        } finally {
+            if (jedis != null)
+                jedis.close();
+        }
+    }
+
 }
