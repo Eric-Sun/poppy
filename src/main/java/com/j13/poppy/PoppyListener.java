@@ -22,7 +22,8 @@ public class PoppyListener implements ServletContextListener {
         JedisManager jedisManager = applicationContext.getBean(JedisManager.class);
         jedisManager.init();
 
-
+        TokenManager tokenManager = applicationContext.getBean(TokenManager.class);
+        tokenManager.init();
     }
 
     @Override
