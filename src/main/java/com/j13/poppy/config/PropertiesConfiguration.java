@@ -2,34 +2,30 @@ package com.j13.poppy.config;
 
 
 import com.j13.poppy.exceptions.RequestFatalException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+@Service
 public class PropertiesConfiguration {
-    private static PropertiesConfiguration config = null;
+    private static Logger LOG = LoggerFactory.getLogger(PropertiesConfiguration.class);
     private static Map<String, String> map = new HashMap();
 
-    private PropertiesConfiguration() {
-    }
 
-    public static PropertiesConfiguration getInstance() {
-        if(config == null) {
-            config = new PropertiesConfiguration();
-        }
-
-        return config;
-    }
-
-    public void addResource(String configPath) throws RequestFatalException {
-        InputStream is = PropertiesConfiguration.class.getResourceAsStream(configPath);
+    @PostConstruct
+    public void init() throws RequestFatalException {
+        InputStream is = PropertiesConfiguration.class.getResourceAsStream("/poppy.properties");
         Properties properties = new Properties();
 
         try {
             properties.load(is);
         } catch (IOException e) {
-            throw new RequestFatalException("configPath=" + configPath, e);
+            throw new RequestFatalException("configPath=/poppy.properties", e);
         }
 
         Set keys = properties.stringPropertyNames();
@@ -39,6 +35,7 @@ public class PropertiesConfiguration {
             String key = (String)iter.next();
             map.put(key, properties.getProperty(key));
         }
+        LOG.info("load all properties");
 
     }
 

@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Random;
 
 @Service("singleton")
-@Scope("singleton")
 public class TokenManager {
 
     private static String PREFIX = "v10:";
@@ -17,9 +17,12 @@ public class TokenManager {
 
     @Autowired
     JedisManager jedisManager;
+    @Autowired
+    PropertiesConfiguration propertiesConfiguration;
 
+    @PostConstruct
     public void init() {
-        s = PropertiesConfiguration.getInstance().getIntValue("token.expire.s");
+        s = propertiesConfiguration.getIntValue("token.expire.s");
     }
 
     public int checkTicket(String t) {
