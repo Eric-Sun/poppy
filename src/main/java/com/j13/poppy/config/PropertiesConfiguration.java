@@ -20,6 +20,9 @@ public class PropertiesConfiguration {
     @PostConstruct
     public void init() throws RequestFatalException {
         InputStream is = PropertiesConfiguration.class.getResourceAsStream("/poppy.properties");
+        if (is == null) {
+            return;
+        }
         Properties properties = new Properties();
 
         try {
@@ -31,8 +34,8 @@ public class PropertiesConfiguration {
         Set keys = properties.stringPropertyNames();
         Iterator iter = keys.iterator();
 
-        while(iter.hasNext()) {
-            String key = (String)iter.next();
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
             map.put(key, properties.getProperty(key));
         }
         LOG.info("load all properties");
@@ -40,10 +43,10 @@ public class PropertiesConfiguration {
     }
 
     public String getStringValue(String key) {
-        return (String)map.get(key);
+        return (String) map.get(key);
     }
 
     public int getIntValue(String key) {
-        return (new Integer((String)map.get(key) + "")).intValue();
+        return (new Integer((String) map.get(key) + "")).intValue();
     }
 }
