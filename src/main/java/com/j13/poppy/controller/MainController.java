@@ -74,37 +74,37 @@ public class MainController {
     }
 
 
-    @RequestMapping("/wechat")
-    public String wechat(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException {
-        response.setContentType("text/html;charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-
-        String postData = parseRequestPostData(request);
-        if (!StringUtils.isEmpty(postData)) {
-            LOG.info("post data . {}", postData);
-        }
-        RequestData requestData = parseRequest(request);
-        String act = requestData.getData().get("act").toString();
-
-        LOG.info("request : {}", JSONV2.toJSONString(requestData));
-        Object obj = null;
-        try {
-            obj = dispatcher.dispatch(act, requestData, postData);
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-            obj = new ErrorResponse(SystemErrorCode.System.SYSTEM_ERROR);
-        }
-        String responseJson = null;
-        if (obj instanceof String) {
-            responseJson = (String) obj;
-        } else {
-            responseJson = JSON.toJSONString(obj);
-        }
-        LOG.info("response : {}", responseJson);
-        response.getWriter().write(responseJson);
-        response.flushBuffer();
-        return null;
-    }
+//    @RequestMapping("/wechat")
+//    public String wechat(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException {
+//        response.setContentType("text/html;charset=UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//
+//        String postData = parseRequestPostData(request);
+//        if (!StringUtils.isEmpty(postData)) {
+//            LOG.info("post data . {}", postData);
+//        }
+//        RequestData requestData = parseRequest(request);
+//        String act = requestData.getData().get("act").toString();
+//
+//        LOG.info("request : {}", JSONV2.toJSONString(requestData));
+//        Object obj = null;
+//        try {
+//            obj = dispatcher.dispatch(act, requestData, postData);
+//        } catch (Exception e) {
+//            LOG.error(e.getMessage());
+//            obj = new ErrorResponse(SystemErrorCode.System.SYSTEM_ERROR);
+//        }
+//        String responseJson = null;
+//        if (obj instanceof String) {
+//            responseJson = (String) obj;
+//        } else {
+//            responseJson = JSON.toJSONString(obj);
+//        }
+//        LOG.info("response : {}", responseJson);
+//        response.getWriter().write(responseJson);
+//        response.flushBuffer();
+//        return null;
+//    }
 
     @RequestMapping("/doc")
     public String doc(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws NoSuchFieldException {

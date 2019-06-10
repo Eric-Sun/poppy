@@ -113,6 +113,9 @@ public class ApiDispatcher {
             }
             LOG.error("", e);
             return new ErrorResponse(SystemErrorCode.System.ACTION_REFLECT_ERROR);
+        } catch (Exception e) {
+            LOG.error("", e);
+            return new ErrorResponse(SystemErrorCode.System.SYSTEM_ERROR);
         }
     }
 
