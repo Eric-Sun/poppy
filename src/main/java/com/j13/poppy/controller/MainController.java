@@ -67,7 +67,7 @@ public class MainController {
         } else {
             responseJson = JSON.toJSONString(obj);
         }
-        LOG.info("response : {}", responseJson.substring(200));
+        LOG.debug("response : {}", responseJson);
         response.getWriter().write(responseJson);
         response.flushBuffer();
         return null;
