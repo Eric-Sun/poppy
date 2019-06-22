@@ -43,7 +43,7 @@ public class MainController {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        LOG.info("request content-type={}", request.getContentType());
+        LOG.debug("request content-type={}", request.getContentType());
 
 //        String postData = parseRequestPostData(request);
 //        if (!StringUtils.isEmpty(postData)) {
@@ -67,7 +67,7 @@ public class MainController {
         } else {
             responseJson = JSON.toJSONString(obj);
         }
-        LOG.info("response : {}", responseJson);
+        LOG.info("response : {}", responseJson.substring(200));
         response.getWriter().write(responseJson);
         response.flushBuffer();
         return null;
@@ -123,7 +123,6 @@ public class MainController {
 
     private RequestData parseRequest(HttpServletRequest request) throws FileUploadException {
         RequestData requestData = new RequestData();
-        LOG.info("aaa  "+ServletFileUpload.CONTENT_TYPE);
         if (ServletFileUpload.isMultipartContent(request)) {
             LOG.debug("multipart content-type.");
             DiskFileItemFactory factory = new DiskFileItemFactory();
