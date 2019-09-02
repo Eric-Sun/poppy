@@ -95,7 +95,8 @@ public class ApiDispatcher {
                         ctxt.setUid(userId);
                     }
                 } else {
-                    return new ErrorResponse(SystemErrorCode.Common.NEED_T);
+                    ctxt.setUid(0);
+//                    return new ErrorResponse(SystemErrorCode.Common.NEED_T);
                 }
             } else {
                 LOG.debug("not need token");

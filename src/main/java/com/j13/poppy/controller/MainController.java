@@ -37,13 +37,13 @@ public class MainController {
     @Autowired
     DocManager docManager;
 
+    private static int requestCount = 0;
+
 
     @RequestMapping("/api")
     public String api(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-
-        LOG.debug("request content-type={}", request.getContentType());
 
 //        String postData = parseRequestPostData(request);
 //        if (!StringUtils.isEmpty(postData)) {
@@ -52,8 +52,9 @@ public class MainController {
         RequestData requestData = parseRequest(request);
         String act = requestData.getData().get("act").toString();
         String postData = "";
+        long timeStart = System.currentTimeMillis();
+        LOG.info("request({}) : {}", requestCount, JSONV2.toJSONString(requestData));
 
-        LOG.info("request : {}", JSONV2.toJSONString(requestData));
         Object obj = null;
         try {
             obj = dispatcher.dispatch(act, requestData, postData);
@@ -67,6 +68,8 @@ public class MainController {
         } else {
             responseJson = JSON.toJSONString(obj);
         }
+        LOG.info("requestCost={}, count={}", System.currentTimeMillis() - timeStart, requestCount);
+        requestCount++;
         LOG.debug("response : {}", responseJson);
         response.getWriter().write(responseJson);
         response.flushBuffer();
