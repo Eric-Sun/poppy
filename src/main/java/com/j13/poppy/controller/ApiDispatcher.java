@@ -80,23 +80,28 @@ public class ApiDispatcher {
 
         try {
             if (ami.isNeedToken()) {
-                LOG.debug("begin to check t.");
-                if (requestData.getData().get(T_KEY) != null) {
-                    // 检查这个t
-                    String t = requestData.getData().get(T_KEY).toString();
-                    LOG.debug("t = {}", t);
-                    int userId = tokenManager.checkTicket(t);
-                    if (userId == 0) {
-                        LOG.debug("t expire. t = {}", t);
-                        // 不存在这个token
-                        return new ErrorResponse(SystemErrorCode.Common.T_EXPIRE);
-                    } else {
-                        LOG.debug("t is ok. t = {},userId = {}", t, userId);
-                        ctxt.setUid(userId);
-                    }
-                } else {
+                // 增加是否要对token过期的错误码的判断，首页之类的如果token过期的话是不需要抛出16的
+                if (ami.isTokenExpireDontThrow16()) {
                     ctxt.setUid(0);
+                } else {
+                    LOG.debug("begin to check t.");
+                    if (requestData.getData().get(T_KEY) != null && !requestData.getData().get(T_KEY).toString().equals("0")) {
+                        // 检查这个t
+                        String t = requestData.getData().get(T_KEY).toString();
+                        LOG.debug("t = {}", t);
+                        int userId = tokenManager.checkTicket(t);
+                        if (userId == 0) {
+                            LOG.debug("t expire. t = {}", t);
+                            // 不存在这个token
+                            return new ErrorResponse(SystemErrorCode.Common.T_EXPIRE);
+                        } else {
+                            LOG.debug("t is ok. t = {},userId = {}", t, userId);
+                            ctxt.setUid(userId);
+                        }
+                    } else {
+                        ctxt.setUid(0);
 //                    return new ErrorResponse(SystemErrorCode.Common.NEED_T);
+                    }
                 }
             } else {
                 LOG.debug("not need token");

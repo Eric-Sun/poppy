@@ -17,6 +17,15 @@ public class ActionMethodInfo {
     // response
     private Class response;
     private List<ParameterInfo> responseParamList = Lists.newLinkedList();
+    private boolean tokenExpireDontThrow16 = false;
+
+    public boolean isTokenExpireDontThrow16() {
+        return tokenExpireDontThrow16;
+    }
+
+    public void setTokenExpireDontThrow16(boolean tokenExpireDontThrow16) {
+        this.tokenExpireDontThrow16 = tokenExpireDontThrow16;
+    }
 
     public Class getResponse() {
         return response;

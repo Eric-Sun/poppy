@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.j13.poppy.anno.Action;
 import com.j13.poppy.anno.NeedToken;
 import com.j13.poppy.anno.Parameter;
+import com.j13.poppy.anno.TokenExpireDontThrow16;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,6 @@ public class ActionServiceLoader implements ApplicationContextAware {
 
     private Map<String, ActionMethodInfo> actionInfoMap = Maps.newHashMap();
 
-    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -66,9 +66,14 @@ public class ActionServiceLoader implements ApplicationContextAware {
                     // parse all anno(eg. Action NeedTicket)
                     Action actionAnno = (Action) actionMethod.getAnnotation(Action.class);
                     NeedToken ticketAnno = (NeedToken) actionMethod.getAnnotation(NeedToken.class);
+                    TokenExpireDontThrow16 tokenExpireDontThrow16 = (TokenExpireDontThrow16) actionMethod.getAnnotation(TokenExpireDontThrow16.class);
 
                     if (ticketAnno != null) {
                         ami.setNeedToken(true);
+                    }
+
+                    if (tokenExpireDontThrow16 != null) {
+                        ami.setTokenExpireDontThrow16(true);
                     }
 
                     if (actionAnno != null) {
