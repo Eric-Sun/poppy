@@ -56,6 +56,7 @@ public class JettyServer {
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(jettyServerConfig.getPort());
         connector.setMaxIdleTime(jettyServerConfig.getMaxIdleTime());
+        connector.setRequestHeaderSize(40960);
         return connector;
     }
 
