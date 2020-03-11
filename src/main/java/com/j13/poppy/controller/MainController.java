@@ -45,6 +45,7 @@ public class MainController {
     public String api(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin","*");
 
 //        String postData = parseRequestPostData(request);
 //        if (!StringUtils.isEmpty(postData)) {
