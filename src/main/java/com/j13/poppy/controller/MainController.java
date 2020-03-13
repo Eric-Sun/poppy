@@ -52,10 +52,10 @@ public class MainController {
 //            LOG.info("post data . {}", postData);
 //        }
         RequestData requestData = parseRequest(request);
+        LOG.info("request({}) : {}", requestCount, JSONV2.toJSONString(requestData));
         String act = requestData.getData().get("act").toString();
         String postData = "";
         long timeStart = System.currentTimeMillis();
-        LOG.info("request({}) : {}", requestCount, JSONV2.toJSONString(requestData));
 
         Object obj = null;
         try {
@@ -129,23 +129,25 @@ public class MainController {
     private RequestData parseRequest(HttpServletRequest request) throws FileUploadException {
         RequestData requestData = new RequestData();
         if (ServletFileUpload.isMultipartContent(request)) {
-            LOG.debug("multipart content-type.");
+            LOG.info("multipart content-type.");
+            LOG.info("act="+request.getParameter("act"));
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload upload = new ServletFileUpload(factory);
             upload.setHeaderEncoding("UTF-8");
             List<FileItem> list = upload.parseRequest(request);
+            LOG.info("list.size={}",list.size());
             for (FileItem item : list) {
                 if (!item.isFormField()) {
                     requestData.getData().put(item.getFieldName(), item);
-                    LOG.debug("item is fileItem object. key={}", item.getFieldName());
+                    LOG.info("item is fileItem object. key={}", item.getFieldName());
                 } else {
                     requestData.getData().put(item.getFieldName(), item.getString());
-                    LOG.debug("item is common field . key={},value={}", item.getFieldName(), item.getString());
+                    LOG.info("item is common field . key={},value={}", item.getFieldName(), item.getString());
                 }
             }
             return requestData;
         } else {
-            LOG.debug("common content-type.");
+            LOG.info("common content-type.");
             Enumeration<String> enumKeys = request.getParameterNames();
             while (enumKeys.hasMoreElements()) {
                 String key = enumKeys.nextElement();
