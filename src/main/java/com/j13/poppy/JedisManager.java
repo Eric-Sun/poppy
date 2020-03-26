@@ -11,6 +11,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 public class JedisManager {
@@ -75,6 +76,51 @@ public class JedisManager {
         try {
             jedis = pool.getResource();
             jedis.del(key);
+        } finally {
+            if (jedis != null)
+                jedis.close();
+        }
+    }
+
+    public void sadd(String key,String member){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.sadd(key,member);
+        } finally {
+            if (jedis != null)
+                jedis.close();
+        }
+    }
+    public void sadd(String key,String... member){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.sadd(key,member);
+        } finally {
+            if (jedis != null)
+                jedis.close();
+        }
+    }
+
+
+    public void srem(String key,String member){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.srem(key,member);
+        } finally {
+            if (jedis != null)
+                jedis.close();
+
+        }
+    }
+
+    public List<String> srandmember(String key, int count){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.srandmember(key,count);
         } finally {
             if (jedis != null)
                 jedis.close();
