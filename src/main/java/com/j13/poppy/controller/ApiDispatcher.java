@@ -1,11 +1,10 @@
 package com.j13.poppy.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.j13.poppy.ErrorResponse;
 import com.j13.poppy.RequestData;
 import com.j13.poppy.SystemErrorCode;
-import com.j13.poppy.TokenManager;
+import com.j13.poppy.TokenCacheInterface;
 import com.j13.poppy.core.ActionMethodInfo;
 import com.j13.poppy.core.ActionServiceLoader;
 import com.j13.poppy.core.CommandContext;
@@ -35,7 +34,7 @@ public class ApiDispatcher {
     ActionServiceLoader actionServiceLoader;
 
     @Autowired
-    TokenManager tokenManager;
+    TokenCacheInterface tokenCacheInterface;
 
 
     public Object dispatch(String act, RequestData requestData, String postData) {
@@ -87,7 +86,7 @@ public class ApiDispatcher {
                     // 检查这个t
                     String t = requestData.getData().get(T_KEY).toString();
                     LOG.debug("t = {}", t);
-                    int userId = tokenManager.checkTicket(t);
+                    int userId = tokenCacheInterface.getToken2UserId(t);
                     if (userId == 0) {
                         if(ami.isTokenExpireDontThrow16()){
                             ctxt.setUid(0);
